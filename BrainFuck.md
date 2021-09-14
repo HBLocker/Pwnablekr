@@ -30,7 +30,7 @@ With it having NX enabled we will have to do a ROP chain on this one.
 
 *Stage two have a look* 
 
-'''
+'''assembly
 (gdb) disassemble main
 Dump of assembler code for function main:
    0x08048671 <+0>:	push   %ebp
@@ -153,11 +153,12 @@ Dump of assembler code for function do_brainfuck:
 '''
 
 
-'code'
+<p>
 I cant copy some of the dump from EDB there is a pointer 
 0x804a0a0 to a funciton we need to use. 
+   </P>
 
-'''
+'''assembly
 <p>
 so we need to write a rop gadget soon, we use a sys func in the code to overwrite. 
 </P
