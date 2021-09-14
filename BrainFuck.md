@@ -29,7 +29,7 @@ With it having NX enabled we will have to do a ROP chain on this one.
 </p>
 
 *Stage two have a look* 
-<code>
+'code'
 
 (gdb) disassemble main
 Dump of assembler code for function main:
@@ -150,14 +150,14 @@ Dump of assembler code for function do_brainfuck:
    0x0804866e <+146>:	pop    %ebx
    0x0804866f <+147>:	pop    %ebp
    0x08048670 <+148>:	ret 
-</code>
+'code'
 
 
-<code>
+'code'
 I cant copy some of the dump from EDB there is a pointer 
 0x804a0a0 to a funciton we need to use. 
 
-</code>
+'code'
 <p>
 so we need to write a rop gadget soon, we use a sys func in the code to overwrite. 
 </P
@@ -169,7 +169,7 @@ The two mostly fun functions are memstet and fgets:
 https://pvs-studio.com/en/blog/posts/cpp/0360/
 </p>
 Time to find theese Addresses 
-<code>
+'code'
 YNAMIC RELOCATION RECORDS
 OFFSET   TYPE              VALUE 
 08049ffc R_386_GLOB_DAT    __gmon_start__
@@ -185,7 +185,7 @@ OFFSET   TYPE              VALUE
 0804a028 R_386_JUMP_SLOT   setvbuf@GLIBC_2.0
 0804a02c R_386_JUMP_SLOT   memset@GLIBC_2.0  <------- Here 
 0804a030 R_386_JUMP_SLOT   putchar@GLIBC_2.0
-</code> 
+'code'
 
 
 
