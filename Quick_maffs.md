@@ -1,54 +1,54 @@
-# RSA overview and expenponant attack overview. 
+# RSA overview and exponent attack overview. 
 
-I was doing a CTF on HTB which I begnn to find reather challanging as I have not really looked into ways in which RSA can be broken never mind put it into a practical example. 
+I was doing a CTF on HTB which I began to find rather challenging as I have not really looked into ways in which RSA can be broken never mind using it in a practical example. 
 
  I will cover in this post a basic overview of RSA and how the attack works and explain the SAGE code written. 
 
  - What is RSA?
 
- - What is an exponant attack?
+ - What is an exponent attack?
 
 
 # Algorithm overview 
 
 
-This is the first step to obtain bot public and private keyes. 
+This is the first step to obtaining both public and private keys. 
 - Compute the following: n = p*q 
 
-- Find a large intiger d which is releative prime to the intiger (p-1) (q-1)
+- Find a large integer d which is relative prime to the integer (p-1) (q-1)
 
-- Compute a uniuqe intiger e in the range of 1 < e <(p-1)(q-1) This is our exponant. 
+- Compute a unique integer e in the range of 1 < e <(p-1)(q-1) This is our exponent. 
 ed = (mod(p-1)(q-1))
 
-- Make the public key which consists of the following pair of intigers (e,n)
+- Make the public key which consists of the following pair of integers (e,n)
 
-- The message will be defined as M to be transmitted in the range of {1.....n} to break M into blocks if the message is to large. 
+- The message will be defined as M to be transmitted in the range of {1.....n} to break M into blocks if the message is too large. 
 
 - Encrypt M into the cryptogram C by the following rule:
 C = M^e (mod n)
 
-Decryption is obtained with using the private key. 
+Decryption is obtained by using the private key. 
 
 D = M^d (mod n)
 
 ### Expontant overview 
 
-An exponant in the RSA algorithm refers to the power which a number is raised. 
+An exponent in the RSA algorithm refers to the power with which a number is raised. 
 The RSA algorithm uses two exponants; public and privite. 
 
-The exponant is deoted as E and used in the encryption procsess. This is used as part of the public key to encrypt messages. The exponant is a small number ranging from (3....65537) and is chosen that is is coprime to the numbers relative to the prime numbers of n =p*q. 
+The exponent is denoted as E and used in the encryption process. This is used as part of the public key to encrypt messages. The exponent is a small number ranging from (3....65537) and is chosen that is coprime to the numbers relative to the prime numbers of n =p*q. 
 
-The private exponent, often denoted as "d," is used in the decryption process. It is a part of the private key and is used to decrypt messages. The private exponent is computed such that d * e ≡ 1 (mod φ(n)), where φ(n) = (p-1) * (q-1) and e is the public exponent. In other words, d and e are multiplicative inverses of each other modulo φ(n).
+The private exponent often denoted as "d," is used in the decryption process. It is a part of the private key and is used to decrypt messages. The private exponent is computed such that d * e ≡ 1 (mod φ(n)), where φ(n) = (p-1) * (q-1) and e is the public exponent. In other words, d and e are multiplicative inverses of each other modulo φ(n).
 
 ### Low Public Exponent RSA
 
-The attack is somewhat trivial we have to say if the message was sent to three people first and the exponant is a low value such as 3. Each recipiant has a different modules N and each recipiant will recieve a different message. 
+The attack is somewhat trivial we have to say if the message was sent to three people first and the exponent is a low value such as 3. Each recipient has a different module N and each recipient will receive a different message. 
 
 C = M^e (mod n)
 
-If an attacker has acsess to C1...C3 they can recover the encrypted message M. We can assume that each modulus N is reletivly prime to one another othweqise the message can not be recoverd.  Since the modui are reletivly ptime we can soleve the equations for m^3 using chineese remainder theorem. 
+If an attacker has access to C1...C3 they can recover the encrypted message M. We can assume that each modulus N is relatively prime to one another otherwise the message can not be recovered.  Since the modus are relatively prime we can solve the equations for m^3 using the Chinese remainder theorem. 
 
-### What is chineese Reaminder Theorem?
+### What is the Chinese Remainder Theorem?
 
 The Chinese Remainder Theorem (CRT) states that if we have two congruences (modular equations) of the form:
 
@@ -67,18 +67,18 @@ Using the CRT, we can combine these two congruences into a single equation that 
 
 ### Putting it all together
 
-Now we have a somewhat understanding of the theory behing this attack, lets put it all together and use it! 
+Now we have a somewhat understanding of the theory behind this attack, let us put it all together and use it! 
 
 https://app.hackthebox.com/challenges/quick-maffs
 
-The challange is as follows:
+The challenge is as follows:
 
 Why does maths have to be so hard? Because some dudes with "degrees" decided there have to be 4529837459872034759 different equations and 347293475923709458 different fields instead of just pure numbers.
 
 
 
 
-we are prestended with the following sage code 
+we are presented with the following sage code 
 ``` sage
 from Crypto.Util.number import *
 from secret import pts,p,q
